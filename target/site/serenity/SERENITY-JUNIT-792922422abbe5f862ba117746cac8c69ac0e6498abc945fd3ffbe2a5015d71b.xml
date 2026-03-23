@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="API JSONPlaceholder" skipped="0" tests="2" time="11.29" timestamp="2026-03-23 10:06:20"><testcase name="Obtener usuario existente"/><testcase name="Crear post correctamente"/></testsuite>

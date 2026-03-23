@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    //id 'net.serenity-bdd.serenity-gradle-plugin' version '3.3.10'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.0.15'
+}
+
+group 'com.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// Configuración para la codificación de archivos
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+// Configuración del plugin de Serenity BDD
+serenity {
+    reports = ["single-page-html"] // Genera un reporte HTML unificado
+}
+
+ext {
+    //serenityVersion = '3.9.8'
+    serenityVersion = '4.0.15'
+}
+dependencies {
+    // Serenity BDD
+    implementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-rest-assured:${serenityVersion}"
+
+    // Integración de Serenity con Cucumber
+    implementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
+
+    // Webdirver Manager para gestionar los controladores de navegador
+    implementation 'io.github.bonigarcia:webdrivermanager:5.7.0'
+
+    // JUnit para la ejecución de pruebas
+    testImplementation 'junit:junit:4.13.2'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-simple:2.0.5'
+
+    // Asegurador (Assertions)
+    testImplementation 'org.assertj:assertj-core:3.23.1'
+
+    // Leer archivos excel
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+}
+
+// Configuración para la ejecución de pruebas
+test {
+    useJUnit()
+    systemProperties System.getProperties()
+    testLogging.showStandardStreams = true
+    finalizedBy(aggregate) // Asegura que el reporte de Serenity se genere después de las pruebas
+}
+
+// Gradle necesita esta configuración para evitar conflictos de versiones
+configurations.all {
+    resolutionStrategy {
+        force "net.serenity-bdd:serenity-model:${serenityVersion}"
+    }
+}
